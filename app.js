@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 // config env
 require('dotenv').config();
 
+// routes
+const userRoutes = require('./routes/userRoutes');
 
+app.use('/user', userRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {
