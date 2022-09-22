@@ -29,5 +29,27 @@ UserSchema.statics.signup = async function (username, password) {
     password: hash,
   });
 
+
   return user;
 };
+
+UserSchema.statics.login = async function (username, password) {
+    if (!username || !password) {
+      throw Error('All fields must be filled!');
+    }
+  
+    const user = await this.findOne({ username });
+  
+    if (!user) {
+      throw Error('Wrong username');
+    }
+    const match = await bcrypt.compare(password, user.password);
+  
+    if (!match) {
+      throw Error('Wrong password');
+    }
+  
+    return user;
+  };
+  
+
