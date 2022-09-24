@@ -1,4 +1,6 @@
 const Post = require('../models/postModel');
+const Comment = require('../models/commentsModel');
+
 
 const getPosts = async (req, res) => {
     console.log(req);
@@ -104,11 +106,37 @@ const getPosts = async (req, res) => {
     }
   };
 
+  const getSpecificPostComments = async (req, res) => {
+    const { postId } = req.params;
+  
+    const comments = await Comment.find({ post: postId }).sort({ createdAt: 1 });
+  
+    if (!comments) {
+      return res.status(401).json({ msg: 'No comments yet' });
+    }
+  
+    return res.status(200).json(comments);
+  };
+  
+  const getSpecificComment = async (req, res) => {
+    const { commentId } = req.params;
+  
+    const comment = await Comment.find({ _id: commentId }).sort({ createdAt: 1 });
+  
+    if (!comment) {
+      return res.status(401).json({ msg: 'No such comment' });
+    }
+  
+    return res.status(200).json(comment);
+  };
+
   module.exports = {
     getPosts,
     createPost,
     getSpecificPost,
     getAuthorPosts,
     updatePost,
-    deletePost
+    deletePost,
+    getSpecificPostComments,
+    getSpecificComment
   }
