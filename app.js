@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // routes
 const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 app.use('/user', userRoutes);
 
