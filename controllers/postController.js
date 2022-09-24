@@ -28,7 +28,6 @@ const getPosts = async (req, res) => {
     const { title, desc, img } = req.body;
     const {imgUrl, img_id} = await uploadImage(img)
 
-    console.log(imgUrl, img_id)
     try {
       const post = await Post.create({
         title,
@@ -82,7 +81,6 @@ const getPosts = async (req, res) => {
 
     if (img.length > 150) {
       ({imgUrl, img_id} = await uploadImage(img));
-      console.log(img_id)
     } else {
       await deleteImage(imgId)
       imgUrl = img;

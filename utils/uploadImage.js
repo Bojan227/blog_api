@@ -16,7 +16,6 @@ const uploadImage = async (img) => {
     try {
       // Upload the image
       const result = await cloudinary.uploader.upload(img, options);
-      console.log(result)
       return {imgUrl: result.url, img_id: result.public_id};
     } catch (error) {
       console.error(error);
@@ -31,7 +30,6 @@ const uploadImage = async (img) => {
     try {
       // Delete the image
       const result = await cloudinary.uploader.destroy(imgId, options);
-      console.log(result)
       return {imgUrl: result.url, img_id: result.public_id};
     } catch (error) {
       console.error(error);

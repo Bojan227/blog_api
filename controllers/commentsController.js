@@ -2,7 +2,6 @@ const Comment = require('../models/commentsModel');
 
 const createComment = async (req, res) => {
   const { username, desc, id } = req.body;
-  console.log(req.body);
 
   if (!username || !desc) {
     return res.status(401).json({ error: 'All fileds must be filled' });
