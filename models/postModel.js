@@ -7,6 +7,7 @@ const PostSchema = new Schema(
     author: { type: Schema.Types.ObjectId, ref: 'User' },
     desc: { required: true, type: String },
     img: String,
+    imgId: String,
     published: { type: Boolean, default: false },
   },
   { timestamps: true }

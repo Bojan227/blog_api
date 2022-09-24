@@ -1,34 +1,40 @@
 const Post = require('../models/postModel');
 const Comment = require('../models/commentsModel');
-const uploadImage = require('../utils/uploadImage')
+const mongoose = require('mongoose')
+
+const {uploadImage, deleteImage} = require('../utils/uploadImage')
 
 const getPosts = async (req, res) => {
-    console.log(req);
-    try {
-      const json = await Post.find({ published: { $eq: true } })
-        .sort({ createdAt: 1 })
-        .populate({
-          path: 'author',
-          select: ['_id', 'username'],
-        });
-  
-      res.status(200).json(json);
-    } catch (error) {
-      res.status(400).json({ msg: 'Bad Request' });
+
+    const json = await Post.find({ published: { $eq: true } })
+    .sort({ createdAt: 1 })
+    .populate({
+      path: 'author',
+      select: ['_id', 'username'],
+    });
+
+
+    if(!json){
+        return res.status(400).json({ msg: 'Bad Request' });
     }
+
+    return res.status(200).json(json);
+
+   
   };
 
 
   const createPost = async (req, res) => {
     const { title, desc, img } = req.body;
-    const imgUrl = await uploadImage(img)
+    const {imgUrl, img_id} = await uploadImage(img)
 
-
+    console.log(imgUrl, img_id)
     try {
       const post = await Post.create({
         title,
         desc,
         img: imgUrl,
+        imgId: img_id,
         author: req.user[0],
       });
   
@@ -56,7 +62,6 @@ const getPosts = async (req, res) => {
 
   const getAuthorPosts = async (req, res) => {
     const { authorId } = req.params;
-    console.log(req.user);
   
     try {
       const post = await Post.find({ author: req.user });
@@ -68,20 +73,25 @@ const getPosts = async (req, res) => {
 
 
   const updatePost = async (req, res) => {
-    const { img } = req.body;
+    const { img, imgId } = req.body;
     const { postId } = req.params;
   
+
     let imgUrl = '';
-  
+    let  img_id = ''
+
     if (img.length > 150) {
-      imgUrl = await uploadImage(img);
+      ({imgUrl, img_id} = await uploadImage(img));
+      console.log(img_id)
     } else {
+      await deleteImage(imgId)
       imgUrl = img;
+      img_id = ''
     }
   
     const post = await Post.findOneAndUpdate(
       { _id: postId },
-      { ...req.body, img: imgUrl },
+      { ...req.body, img: imgUrl, imgId:  img_id },
       { returnOriginal: false }
     );
   
