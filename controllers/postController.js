@@ -1,6 +1,6 @@
 const Post = require('../models/postModel');
 const Comment = require('../models/commentsModel');
-
+const uploadImage = require('../utils/uploadImage')
 
 const getPosts = async (req, res) => {
     console.log(req);
@@ -21,7 +21,9 @@ const getPosts = async (req, res) => {
 
   const createPost = async (req, res) => {
     const { title, desc, img } = req.body;
-    const imgUrl = await uploadImage(img);
+    const imgUrl = await uploadImage(img)
+
+
     try {
       const post = await Post.create({
         title,
