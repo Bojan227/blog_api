@@ -8,8 +8,12 @@ require('dotenv').config();
 // routes
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+
 
 app.use('/user', userRoutes);
+app.use('/posts', postRoutes)
+app.use('/comments', commentRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {
